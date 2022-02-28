@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,25 +58,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// Import readline module for getting input from console
-// Find more here: https://nodejs.org/api/readline.html#readline_readline
-// import readline from 'readline';
-// import _ from 'lodash';
-var express_1 = __importDefault(require("express"));
-var logger_1 = __importDefault(require("./utilities/logger"));
-var imagerescaler_1 = __importDefault(require("./utilities/imagerescaler"));
-var app = (0, express_1.default)();
-var port = 3000;
-app.use('/assets/full', express_1.default.static('assets/full'));
-app.get('/api/images', imagerescaler_1.default, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+var sharp_1 = __importDefault(require("sharp"));
+var scaler = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var path, filePath, createdPath, heightPicked, height, widthPicked, width;
     return __generator(this, function (_a) {
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('path')); })];
+            case 1:
+                path = _a.sent();
+                filePath = "assets/full/" + req.query.filename + ".jpg";
+                createdPath = "assets/thumb/" + req.query.filename + ".jpeg";
+                heightPicked = (req.query.height);
+                height = parseInt(heightPicked);
+                widthPicked = (req.query.width);
+                width = parseInt(widthPicked);
+                (0, sharp_1.default)(filePath)
+                    .resize(width, height)
+                    .flatten()
+                    .toFile(createdPath)
+                    .then(function () {
+                    var resolvedCreatedPath = path.resolve(createdPath);
+                    res.sendFile(resolvedCreatedPath);
+                })
+                    .catch(function () { return res.send('Error: File does not exist!'); });
+                next();
+                return [2 /*return*/];
+        }
     });
-}); });
-app.get('/api', logger_1.default, function (req, res) {
-    res.send('Server Working!');
-});
-app.listen(port, function () {
-    console.log("server started at port:".concat(port));
-});
-exports.default = app;
+}); };
+exports.default = scaler;
