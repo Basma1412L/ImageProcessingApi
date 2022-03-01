@@ -54,14 +54,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var sharp_1 = __importDefault(require("sharp"));
-var properties_1 = __importDefault(require("./properties"));
-var scaler = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var path, fs, image_properties, resolvedCreatedPath;
+var lodash_1 = require("lodash");
+var Properties = /** @class */ (function () {
+    function Properties(width, height, filePath, createdPath) {
+        this.height = height;
+        this.width = width;
+        this.filePath = filePath;
+        this.createdPath = createdPath;
+    }
+    return Properties;
+}());
+var properties = function (req, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var path, fs, filePath, resolvedfilePath, heightPicked, height, widthPicked, width, createdPath;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('path')); })];
@@ -70,26 +75,37 @@ var scaler = function (req, res, next) { return __awaiter(void 0, void 0, void 0
                 return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('fs')); })];
             case 2:
                 fs = _a.sent();
-                return [4 /*yield*/, (0, properties_1.default)(req, next)];
-            case 3:
-                image_properties = _a.sent();
-                resolvedCreatedPath = path.resolve(image_properties.createdPath);
-                if ((fs.existsSync(resolvedCreatedPath))) {
-                    res.sendFile(resolvedCreatedPath);
+                try {
+                    if (!(req.query.filename) || !(req.query.height) || !(req.query.width)) {
+                        throw new Error('Missing Parameter');
+                    }
+                    filePath = "assets/full/" + req.query.filename + ".jpg";
+                    resolvedfilePath = path.resolve(filePath);
+                    if (!(0, lodash_1.isString)(filePath)) {
+                        throw new Error('Invalid file path format');
+                    }
+                    if (!(fs.existsSync(resolvedfilePath))) {
+                        throw new Error('Image does not exist');
+                    }
+                    heightPicked = (req.query.height);
+                    height = parseInt(heightPicked);
+                    if (isNaN(height)) {
+                        throw new Error('Height should be a number');
+                    }
+                    widthPicked = (req.query.width);
+                    width = parseInt(widthPicked);
+                    if (isNaN(width)) {
+                        throw new Error('Width should be a number');
+                    }
+                    createdPath = "assets/thumb/" + req.query.filename + req.query.height + req.query.width + ".jpeg";
+                    return [2 /*return*/, new Properties(width, height, filePath, createdPath)];
                 }
-                else {
-                    (0, sharp_1.default)(image_properties.filePath)
-                        .resize(image_properties.width, image_properties.height)
-                        .flatten()
-                        .toFile(image_properties.createdPath)
-                        .then(function () {
-                        res.sendFile(resolvedCreatedPath);
-                    })
-                        .catch(function (err) { return next(err); });
-                    next();
+                catch (err) {
+                    next(err);
+                    throw new Error('Could not resize the image');
                 }
                 return [2 /*return*/];
         }
     });
 }); };
-exports.default = scaler;
+exports.default = properties;

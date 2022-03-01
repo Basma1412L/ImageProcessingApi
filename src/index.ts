@@ -11,14 +11,14 @@ const port = 3000;
 
 app.use('/assets/full', express.static('assets/full'));
 
-app.get('/api/images', scaler, async (req, res) => {
+app.get('/api/images', scaler, async (req, res):Promise<any> => {
 }); 
 
-app.get('/api', logger, (req, res) => {
+app.get('/api', logger, (req, res):void => {
     res.send('Server Working!');
 }); 
  
-app.listen(port, () => {
+app.listen(port, ():void => {
     console.log(`server started at port:${port}`);
 })
 

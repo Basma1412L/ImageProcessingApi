@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,67 +58,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var supertest_1 = __importDefault(require("supertest"));
-var index_1 = __importDefault(require("../index"));
-var fs_1 = require("fs");
-var imageScaleFunction_1 = __importDefault(require("../utilities/imageScaleFunction"));
-var request = (0, supertest_1.default)(index_1.default);
-describe('Test Image Scaling Middleware', function () {
-    it('Test the scaling method', function () {
-        var path = require('path');
-        var filePath = "assets/full/palmtunnel.jpg";
-        var filePath2 = "assets/thumb/palmtunnel.jpeg";
-        expect(function () { return __awaiter(void 0, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, (0, imageScaleFunction_1.default)(500, 500, filePath, filePath2)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
+var sharp_1 = __importDefault(require("sharp"));
+var rescaler = function (height, width, filePath, createdPath) { return __awaiter(void 0, void 0, void 0, function () {
+    var path, fs, resolvedCreatedPath;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('path')); })];
+            case 1:
+                path = _a.sent();
+                return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('fs')); })];
+            case 2:
+                fs = _a.sent();
+                resolvedCreatedPath = path.resolve(createdPath);
+                if ((fs.existsSync(resolvedCreatedPath))) {
+                    console.log("Found!");
                 }
-            });
-        }); }).not.toThrow();
-    });
-});
-describe('Endpoint works', function () {
-    it('gets the api endpoint', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/api/images?filename=fjord&width=1000&height=500')];
-                case 1:
-                    response = _a.sent();
-                    expect(response.status).toBe(200);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-});
-describe('Endpoint 2 works', function () {
-    it('gets the api endpoint', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/api/images?filename=palmtunnel&width=1000&height=500')];
-                case 1:
-                    response = _a.sent();
-                    expect(response.status).toBe(200);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-});
-describe('New image is created', function () {
-    it('checks  new image', function () {
-        var fs = require('fs');
-        var path = require('path');
-        var filePath = "assets/thumb/palmtunnel.jpeg";
-        var resolvedCreatedPath = path.resolve(filePath);
-        if (fs.existsSync(resolvedCreatedPath)) {
-            fs_1.promises.unlink(resolvedCreatedPath);
+                else {
+                    (0, sharp_1.default)(filePath)
+                        .resize(width, height)
+                        .flatten()
+                        .toFile(createdPath)
+                        .then(function () {
+                        console.log("Created!");
+                    })
+                        .catch(function (err) { return console.log("Error"); });
+                }
+                return [2 /*return*/];
         }
-        var response = request.get('/api/images?filename=palmtunnel&width=200&height=200').then(function (result) {
-            expect(fs.existsSync(resolvedCreatedPath)).toBe(true);
-        });
     });
-});
+}); };
+exports.default = rescaler;
