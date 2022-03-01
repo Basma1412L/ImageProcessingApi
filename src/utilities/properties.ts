@@ -48,12 +48,8 @@ const properties = async (
     if (isNaN(width)) {
       throw new Error('Width should be a number');
     }
-    const createdPath =
-      'assets/thumb/' +
-      req.query.filename +
-      req.query.height +
-      req.query.width +
-      '.jpeg';
+    let createdPath = 'assets/thumb/' + req.query.filename + '' +
+      req.query.height + '' + req.query.width + '.jpeg';
     return new Properties(width, height, filePath, createdPath);
   } catch (err) {
     next(err);

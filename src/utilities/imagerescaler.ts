@@ -2,6 +2,7 @@ import e from 'express';
 import express from 'express';
 import sharp from 'sharp';
 import properties from './properties';
+import rescaler from './imageScaleFunction';
 
 const scaler = async (
   req: express.Request,
@@ -15,14 +16,11 @@ const scaler = async (
   if (fs.existsSync(resolvedCreatedPath)) {
     res.sendFile(resolvedCreatedPath);
   } else {
-    sharp(image_properties.filePath)
-      .resize(image_properties.width, image_properties.height)
-      .flatten()
-      .toFile(image_properties.createdPath)
-      .then(() => {
-        res.sendFile(resolvedCreatedPath);
-      })
-      .catch((err) => next(err));
+    rescaler(image_properties.height, image_properties.width, image_properties.filePath, image_properties.createdPath)
+    .then(() => {
+      res.sendFile(resolvedCreatedPath);
+    })
+    .catch((err) => next(err));
     next();
   }
 };
