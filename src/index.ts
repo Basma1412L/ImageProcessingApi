@@ -11,16 +11,16 @@ const port = 3000;
 
 app.use('/assets/full', express.static('assets/full'));
 
-app.get('/api/images', scaler, async (req, res):Promise<any> => {
-}); 
+app.get('/api/images', scaler, async (req, res): Promise<any> => {
+  //Everything is handled in the middleware
+});
 
-app.get('/api', logger, (req, res):void => {
-    res.send('Server Working!');
-}); 
- 
-app.listen(port, ():void => {
-    console.log(`server started at port:${port}`);
-})
+app.get('/api', logger, (req, res): void => {
+  res.send('Server Working!');
+});
 
+app.listen(port, (): void => {
+  console.log(`server started at port:${port}`);
+});
 
 export default app;

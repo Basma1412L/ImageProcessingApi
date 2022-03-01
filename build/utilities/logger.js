@@ -1,8 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
 var logger = function (req, res, next) {
-    var url = req.url;
-    console.log("".concat(url, " wqas visited"));
-    next();
+  var url = req.url;
+  console.log(''.concat(url, ' wqas visited'));
+  next();
 };
 exports.default = logger;
