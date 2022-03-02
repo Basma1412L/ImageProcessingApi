@@ -101,7 +101,10 @@ var properties = function (req, next) { return __awaiter(void 0, void 0, void 0,
                     return [2 /*return*/, property];
                 }
                 catch (err) {
-                    next(err);
+                    if (err instanceof Error) {
+                        next(err.message);
+                    }
+                    next();
                     throw new Error('Could not resize the image');
                 }
                 return [2 /*return*/];

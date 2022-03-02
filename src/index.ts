@@ -7,12 +7,11 @@ import logger from './utilities/logger';
 import scaler from './utilities/imagerescaler';
 
 const app = express();
-const port = 8080;
+const port = 3000;
 
 app.use('/assets/full', express.static('assets/full'));
 
 app.use('/assets/full', express.static('assets/thumb'));
-
 
 app.get('/api/images', scaler, async (req, res): Promise<any> => {
   //Everything is handled in the middleware

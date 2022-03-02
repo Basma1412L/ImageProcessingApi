@@ -47,7 +47,7 @@ var express_1 = __importDefault(require("express"));
 var logger_1 = __importDefault(require("./utilities/logger"));
 var imagerescaler_1 = __importDefault(require("./utilities/imagerescaler"));
 var app = (0, express_1.default)();
-var port = 8080;
+var port = 3000;
 app.use('/assets/full', express_1.default.static('assets/full'));
 app.use('/assets/full', express_1.default.static('assets/thumb'));
 app.get('/api/images', imagerescaler_1.default, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {

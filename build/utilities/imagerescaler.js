@@ -77,13 +77,13 @@ var scaler = function (req, res, next) { return __awaiter(void 0, void 0, void 0
             case 4:
                 _a.trys.push([4, 8, , 9]);
                 if (!fs.existsSync(image_properties.createdPath)) return [3 /*break*/, 5];
-                res.sendFile(image_properties.createdPath, { root: "." });
+                res.sendFile(image_properties.createdPath, { root: '.' });
                 return [3 /*break*/, 7];
             case 5: return [4 /*yield*/, (0, imageScaleFunction_1.default)(image_properties.height, image_properties.width, image_properties.filePath, image_properties.createdPath)];
             case 6:
                 created = _a.sent();
                 if (created) {
-                    res.sendFile(image_properties.createdPath, { root: "." });
+                    res.sendFile(image_properties.createdPath, { root: '.' });
                     next();
                 }
                 else {
@@ -93,6 +93,9 @@ var scaler = function (req, res, next) { return __awaiter(void 0, void 0, void 0
             case 7: return [3 /*break*/, 9];
             case 8:
                 err_1 = _a.sent();
+                if (err_1 instanceof Error) {
+                    res.send(err_1.message);
+                }
                 next(err_1);
                 return [3 /*break*/, 9];
             case 9: return [2 /*return*/];

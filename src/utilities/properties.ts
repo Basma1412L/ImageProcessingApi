@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 import { isString } from 'lodash';
 
 class Properties {
@@ -21,7 +21,7 @@ class Properties {
 
 const properties = async (
   req: express.Request,
-  next: Function
+  next: NextFunction
 ): Promise<Properties> => {
   const path = await import('path');
   const fs = await import('fs');
@@ -47,11 +47,14 @@ const properties = async (
     if (isNaN(width)) {
       throw new Error('Width should be a number');
     }
-    const createdPath =  `assets/thumb/${req.query.filename}${req.query.height}${req.query.width}.jpeg`;
-    const property= new Properties(width, height, filePath, createdPath);
+    const createdPath = `assets/thumb/${req.query.filename}${req.query.height}${req.query.width}.jpeg`;
+    const property = new Properties(width, height, filePath, createdPath);
     return property;
   } catch (err) {
-    next(err);
+    if (err instanceof Error) {
+      next(err.message);
+    }
+    next();
     throw new Error('Could not resize the image');
   }
 };

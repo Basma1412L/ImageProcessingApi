@@ -9,8 +9,8 @@
     "jasmine": "jasmine",
     "test": "npm run build && npm run jasmine",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "pretty": "prettier --write \"*/*.ts\""
+    "pretty": "prettier --write \"src/**/*.ts\"",
+    "lint:fix": "eslint src/**/*.ts --fix"
     },
   "keywords": [],
   "author": "",
