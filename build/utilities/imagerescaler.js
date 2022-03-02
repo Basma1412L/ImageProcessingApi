@@ -61,7 +61,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var properties_1 = __importDefault(require("./properties"));
 var imageScaleFunction_1 = __importDefault(require("./imageScaleFunction"));
 var scaler = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var path, fs, image_properties, resolvedCreatedPath;
+    var path, fs, image_properties, created, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('path')); })];
@@ -73,19 +73,29 @@ var scaler = function (req, res, next) { return __awaiter(void 0, void 0, void 0
                 return [4 /*yield*/, (0, properties_1.default)(req, next)];
             case 3:
                 image_properties = _a.sent();
-                resolvedCreatedPath = path.resolve(image_properties.createdPath);
-                if (fs.existsSync(resolvedCreatedPath)) {
-                    res.sendFile(resolvedCreatedPath);
-                }
-                else {
-                    (0, imageScaleFunction_1.default)(image_properties.height, image_properties.width, image_properties.filePath, image_properties.createdPath)
-                        .then(function () {
-                        res.sendFile(resolvedCreatedPath);
-                    })
-                        .catch(function (err) { return next(err); });
+                _a.label = 4;
+            case 4:
+                _a.trys.push([4, 8, , 9]);
+                if (!fs.existsSync(image_properties.createdPath)) return [3 /*break*/, 5];
+                res.sendFile(image_properties.createdPath, { root: "." });
+                return [3 /*break*/, 7];
+            case 5: return [4 /*yield*/, (0, imageScaleFunction_1.default)(image_properties.height, image_properties.width, image_properties.filePath, image_properties.createdPath)];
+            case 6:
+                created = _a.sent();
+                if (created) {
+                    res.sendFile(image_properties.createdPath, { root: "." });
                     next();
                 }
-                return [2 /*return*/];
+                else {
+                    throw new Error('Failed to create image');
+                }
+                _a.label = 7;
+            case 7: return [3 /*break*/, 9];
+            case 8:
+                err_1 = _a.sent();
+                next(err_1);
+                return [3 /*break*/, 9];
+            case 9: return [2 /*return*/];
         }
     });
 }); };

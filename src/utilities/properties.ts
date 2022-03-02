@@ -30,12 +30,11 @@ const properties = async (
       throw new Error('Missing Parameter');
     }
     const filePath = 'assets/full/' + req.query.filename + '.jpg';
-    const resolvedfilePath = path.resolve(filePath);
 
     if (!isString(filePath)) {
       throw new Error('Invalid file path format');
     }
-    if (!fs.existsSync(resolvedfilePath)) {
+    if (!fs.existsSync(filePath)) {
       throw new Error('Image does not exist');
     }
     const heightPicked = req.query.height as string;
@@ -48,9 +47,9 @@ const properties = async (
     if (isNaN(width)) {
       throw new Error('Width should be a number');
     }
-    let createdPath = 'assets/thumb/' + req.query.filename + '' +
-      req.query.height + '' + req.query.width + '.jpeg';
-    return new Properties(width, height, filePath, createdPath);
+    const createdPath =  `assets/thumb/${req.query.filename}${req.query.height}${req.query.width}.jpeg`;
+    const property= new Properties(width, height, filePath, createdPath);
+    return property;
   } catch (err) {
     next(err);
     throw new Error('Could not resize the image');

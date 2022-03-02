@@ -66,7 +66,7 @@ var Properties = /** @class */ (function () {
     return Properties;
 }());
 var properties = function (req, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var path, fs, filePath, resolvedfilePath, heightPicked, height, widthPicked, width, createdPath;
+    var path, fs, filePath, heightPicked, height, widthPicked, width, createdPath, property;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('path')); })];
@@ -80,11 +80,10 @@ var properties = function (req, next) { return __awaiter(void 0, void 0, void 0,
                         throw new Error('Missing Parameter');
                     }
                     filePath = 'assets/full/' + req.query.filename + '.jpg';
-                    resolvedfilePath = path.resolve(filePath);
                     if (!(0, lodash_1.isString)(filePath)) {
                         throw new Error('Invalid file path format');
                     }
-                    if (!fs.existsSync(resolvedfilePath)) {
+                    if (!fs.existsSync(filePath)) {
                         throw new Error('Image does not exist');
                     }
                     heightPicked = req.query.height;
@@ -97,9 +96,9 @@ var properties = function (req, next) { return __awaiter(void 0, void 0, void 0,
                     if (isNaN(width)) {
                         throw new Error('Width should be a number');
                     }
-                    createdPath = 'assets/thumb/' + req.query.filename + '' +
-                        req.query.height + '' + req.query.width + '.jpeg';
-                    return [2 /*return*/, new Properties(width, height, filePath, createdPath)];
+                    createdPath = "assets/thumb/".concat(req.query.filename).concat(req.query.height).concat(req.query.width, ".jpeg");
+                    property = new Properties(width, height, filePath, createdPath);
+                    return [2 /*return*/, property];
                 }
                 catch (err) {
                     next(err);
