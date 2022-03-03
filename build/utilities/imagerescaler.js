@@ -70,12 +70,12 @@ var scaler = function (req, res, next) { return __awaiter(void 0, void 0, void 0
                 return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('fs')); })];
             case 2:
                 fs = _a.sent();
-                return [4 /*yield*/, (0, properties_1.default)(req, next)];
+                _a.label = 3;
             case 3:
-                image_properties = _a.sent();
-                _a.label = 4;
+                _a.trys.push([3, 8, , 9]);
+                return [4 /*yield*/, (0, properties_1.default)(req, res, next)];
             case 4:
-                _a.trys.push([4, 8, , 9]);
+                image_properties = _a.sent();
                 if (!fs.existsSync(image_properties.createdPath)) return [3 /*break*/, 5];
                 res.sendFile(image_properties.createdPath, { root: '.' });
                 return [3 /*break*/, 7];
@@ -84,7 +84,6 @@ var scaler = function (req, res, next) { return __awaiter(void 0, void 0, void 0
                 created = _a.sent();
                 if (created) {
                     res.sendFile(image_properties.createdPath, { root: '.' });
-                    next();
                 }
                 else {
                     throw new Error('Failed to create image');
@@ -96,7 +95,6 @@ var scaler = function (req, res, next) { return __awaiter(void 0, void 0, void 0
                 if (err_1 instanceof Error) {
                     res.send(err_1.message);
                 }
-                next(err_1);
                 return [3 /*break*/, 9];
             case 9: return [2 /*return*/];
         }

@@ -11,29 +11,27 @@ const scaler = async (
 ): Promise<void> => {
   const path = await import('path');
   const fs = await import('fs');
-  const image_properties = await properties(req, next);
   try {
-    if (fs.existsSync(image_properties.createdPath)) {
+  const image_properties = await properties(req, res, next);
+  if (fs.existsSync(image_properties.createdPath)) {
+    res.sendFile(image_properties.createdPath, { root: '.' });
+  } else {
+    const created = await rescaler(
+      image_properties.height,
+      image_properties.width,
+      image_properties.filePath,
+      image_properties.createdPath
+    );
+    if (created) {
       res.sendFile(image_properties.createdPath, { root: '.' });
     } else {
-      const created = await rescaler(
-        image_properties.height,
-        image_properties.width,
-        image_properties.filePath,
-        image_properties.createdPath
-      );
-      if (created) {
-        res.sendFile(image_properties.createdPath, { root: '.' });
-        next();
-      } else {
-        throw new Error('Failed to create image');
-      }
+      throw new Error('Failed to create image');
     }
+  }
   } catch (err) {
     if (err instanceof Error) {
       res.send(err.message);
     }
-    next(err);
   }
 };
 

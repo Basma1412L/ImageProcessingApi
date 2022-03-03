@@ -17,6 +17,7 @@ app.get('/api/images', scaler, async (req, res): Promise<any> => {
   //Everything is handled in the middleware
 });
 
+
 app.get('/api', logger, (req, res): void => {
   res.send('Server Working!');
 });

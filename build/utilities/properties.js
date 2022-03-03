@@ -65,7 +65,7 @@ var Properties = /** @class */ (function () {
     }
     return Properties;
 }());
-var properties = function (req, next) { return __awaiter(void 0, void 0, void 0, function () {
+var properties = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var path, fs, filePath, heightPicked, height, widthPicked, width, createdPath, property;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -101,11 +101,7 @@ var properties = function (req, next) { return __awaiter(void 0, void 0, void 0,
                     return [2 /*return*/, property];
                 }
                 catch (err) {
-                    if (err instanceof Error) {
-                        next(err.message);
-                    }
-                    next();
-                    throw new Error('Could not resize the image');
+                    throw new Error(err);
                 }
                 return [2 /*return*/];
         }

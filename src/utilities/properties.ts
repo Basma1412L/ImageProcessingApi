@@ -21,6 +21,7 @@ class Properties {
 
 const properties = async (
   req: express.Request,
+  res: express.Response,
   next: NextFunction
 ): Promise<Properties> => {
   const path = await import('path');
@@ -50,12 +51,8 @@ const properties = async (
     const createdPath = `assets/thumb/${req.query.filename}${req.query.height}${req.query.width}.jpeg`;
     const property = new Properties(width, height, filePath, createdPath);
     return property;
-  } catch (err) {
-    if (err instanceof Error) {
-      next(err.message);
-    }
-    next();
-    throw new Error('Could not resize the image');
+  } catch (err:any) {
+      throw new Error(err);
   }
 };
 
